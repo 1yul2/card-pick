@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>오늘의 카드뽑기</title>\
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div>
+        <div class="title">카드 뽑기</div>
+        <div class="description">과연 커피는 누가 구매하게 될까요 !?</div>
+      </div>
+      <div class="badge normal" id="badge-recent">READY</div>
+    </header>
+
+    <section class="card-container">
+      <div class="card" id="card">
+        <div class="side front">
+          <div class="front-text">
+            <div class="front-icon">🎴</div>
+            <div class="front-title">TAP TO DRAW</div>
+            <div>카드를 뒤집어 결과를 확인하세요</div>
+          </div>
+        </div>
+        <div class="side back">
+          <div class="result">
+            <div class="result-icon" id="result-icon">✨</div>
+            <div class="result-name" id="result-name">Name</div>
+            <div class="result-grade" id="result-grade">Wins / Losses</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="button-area">
+      <button class="button" id="btn-draw">뽑기</button>
+      <button class="button secondary" id="btn-reset">리셋</button>
+    </div>
+
+    <div class="probability" id="probability"></div>
+
+    <section>
+      <div class="description">뽑은 카드</div>
+      <div class="history" id="history"></div>
+    </section>
+
+    <section class="add-card">
+      <div class="description">카드 추가하기</div>
+      <form id="add-card-form" class="add-card-form">
+        <input type="text" id="name" placeholder="이름" required />
+        <input type="text" id="team" placeholder="팀" required />
+        <input type="text" id="icon" placeholder="아이콘 (예: 🍃)" required />
+        <button type="submit" class="button">추가</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

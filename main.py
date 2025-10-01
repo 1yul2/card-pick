@@ -1,16 +1,33 @@
-# 샘플 Python 스크립트입니다.
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+import sqlite3
+from database import init_db, get_all_cards, add_card
 
-# ⌃R을(를) 눌러 실행하거나 내 코드로 바꿉니다.
-# 클래스, 파일, 도구 창, 액션 및 설정을 어디서나 검색하려면 ⇧ 두 번을(를) 누릅니다.
+app = FastAPI()
 
+# DB 초기화
+init_db()
 
-def print_hi(name):
-    # 스크립트를 디버그하려면 하단 코드 줄의 중단점을 사용합니다.
-    print(f'Hi, {name}')  # 중단점을 전환하려면 ⌘F8을(를) 누릅니다.
+app.mount("/static", StaticFiles(directory="."), name="static")
 
+@app.get("/")
+async def root():
+    return FileResponse("index.html")
 
-# 스크립트를 실행하려면 여백의 녹색 버튼을 누릅니다.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@app.get("/api/cards")
+def get_cards():
+    return get_all_cards()
 
-# https://www.jetbrains.com/help/pycharm/에서 PyCharm 도움말 참조
+class Card(BaseModel):
+    name: str
+    team: str
+    icon: str
+    wins: int = 0
+    losses: int = 0
+
+@app.post("/api/cards/add")
+def create_card(card: Card):
+    add_card(card.name, card.team, card.icon, card.wins, card.losses)
+    return {"message": "Card added successfully"}
