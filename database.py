@@ -35,7 +35,28 @@ def init_db():
 def get_all_cards():
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT name, team, icon, grade, wins, losses FROM cards")
+    cur.execute("SELECT id, name, team, icon, grade, wins, losses FROM cards")
     rows = cur.fetchall()
     conn.close()
     return rows
+
+
+# Helper function to update a card
+def update_card(card_id: int, name: str, team: str, icon: str, grade: str, wins: int, losses: int):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE cards
+        SET name = %s, team = %s, icon = %s, grade = %s, wins = %s, losses = %s
+        WHERE id = %s
+    """, (name, team, icon, grade, wins, losses, card_id))
+    conn.commit()
+    conn.close()
+
+# Helper function to delete a card
+def delete_card(card_id: int):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM cards WHERE id = %s", (card_id,))
+    conn.commit()
+    conn.close()

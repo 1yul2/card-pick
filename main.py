@@ -3,6 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from database import init_db, get_all_cards, add_card, get_connection
+
 app = FastAPI()
 
 # DB 초기화
@@ -30,9 +31,6 @@ class Card(BaseModel):
 def create_card(card: Card):
     add_card(card.name, card.team, card.icon, card.grade, card.wins, card.losses)
     return {"message": "Card added successfully"}
-
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
 
 @app.get("/adminpage")
 async def admin_page():
