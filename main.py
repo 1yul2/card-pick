@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from database import init_db, get_all_cards, add_card, get_connection
+from database import init_db, get_all_cards, add_card, delete_card as db_delete_card, update_card as db_update_card
 
 app = FastAPI()
 
@@ -38,22 +38,10 @@ async def admin_page():
 
 @app.delete("/api/cards/delete/{card_id}")
 def delete_card(card_id: int):
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("DELETE FROM cards WHERE id = %s", (card_id,))
-    conn.commit()
-    conn.close()
+    db_delete_card(card_id)
     return {"message": "Card deleted successfully"}
 
 @app.put("/api/cards/update/{card_id}")
 def update_card(card_id: int, card: Card):
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("""
-        UPDATE cards
-        SET name = %s, team = %s, icon = %s, grade = %s, wins = %s, losses = %s
-        WHERE id = %s
-    """, (card.name, card.team, card.icon, card.grade, card.wins, card.losses, card_id))
-    conn.commit()
-    conn.close()
+    db_update_card(card_id, card.name, card.team, card.icon, card.grade, card.wins, card.losses)
     return {"message": "Card updated successfully"}

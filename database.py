@@ -27,7 +27,7 @@ def init_db():
         grade TEXT NOT NULL,
         wins INTEGER DEFAULT 0,
         losses INTEGER DEFAULT 0
-    )
+    );
     """)
     conn.commit()
     conn.close()
