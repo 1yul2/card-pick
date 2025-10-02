@@ -9,7 +9,7 @@ app = FastAPI()
 # DB 초기화
 init_db()
 
-app.mount("/static", StaticFiles(directory="."), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def root():
