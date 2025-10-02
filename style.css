@@ -195,8 +195,42 @@ body {
   box-shadow: 0 6px 12px rgba(79, 103, 255, 0.3);
 }
 
+
 .add-card-form button:active {
   background: var(--btn-press);
+}
+
+.team-filter {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.team-filter .description {
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--sub);
+}
+
+#team-filter {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 14px;
+  appearance: none; /* 기본 화살표 제거 */
+  cursor: pointer;
+}
+
+#team-filter:focus {
+  outline: none;
+  border-color: var(--btn);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 360px) {

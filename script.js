@@ -4,7 +4,8 @@ let cardList = [];
 async function loadCards() {
   const res = await fetch("/api/cards");
   cardList = await res.json();
-  renderProbability();
+  //renderProbability();
+  renderTeamOptions();
 }
 
 loadCards();
@@ -37,8 +38,21 @@ function renderProbability() {
 
 // 가중치 뽑기
 function pickCard() {
-  const idx = Math.floor(Math.random() * cardList.length);
-  return cardList[idx];
+  const selectedTeam = document.getElementById("team-filter")?.value;
+  let pool = cardList;
+
+  // 팀이 선택되어 있으면 해당 팀 카드만 필터링
+  if (selectedTeam) {
+    pool = cardList.filter(c => c.team === selectedTeam);
+  }
+
+  if (pool.length === 0) {
+    alert("선택한 팀에 카드가 없습니다.");
+    return null;
+  }
+
+  const idx = Math.floor(Math.random() * pool.length);
+  return pool[idx];
 }
 
 // UI 반영
@@ -135,5 +149,25 @@ if (addCardForm) {
     } else {
       alert("카드 추가에 실패했습니다.");
     }
+  });
+}
+// 팀 필터 옵션 렌더링
+function renderTeamOptions() {
+  const select = document.getElementById("team-filter");
+  if (!select) return;
+  // 기존 옵션 제거
+  select.innerHTML = "";
+  // "전체" 기본 옵션 추가
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "전체";
+  select.appendChild(defaultOption);
+  // 유니크 팀 목록 추출
+  const teams = Array.from(new Set(cardList.map(card => card.team).filter(Boolean)));
+  teams.forEach(team => {
+    const option = document.createElement("option");
+    option.value = team;
+    option.textContent = team;
+    select.appendChild(option);
   });
 }
