@@ -245,7 +245,11 @@ async function updateCard(id, data) {
     const res = await fetch(`/api/cards/update/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      // Ensure the property name is 'wins' (plural) in the payload
+      body: JSON.stringify({
+        ...data,
+        wins: data.wins, // ensure correct spelling
+      }),
     });
     if (res.ok) {
       alert("카드가 업데이트되었습니다.");

@@ -46,3 +46,16 @@ def delete_card(card_id: int):
     conn.commit()
     conn.close()
     return {"message": "Card deleted successfully"}
+
+@app.put("/api/cards/update/{card_id}")
+def update_card(card_id: int, card: Card):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE cards
+        SET name = %s, team = %s, icon = %s, grade = %s, wins = %s, losses = %s
+        WHERE id = %s
+    """, (card.name, card.team, card.icon, card.grade, card.wins, card.losses, card_id))
+    conn.commit()
+    conn.close()
+    return {"message": "Card updated successfully"}
