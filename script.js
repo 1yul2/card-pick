@@ -23,6 +23,7 @@ const resultGrade = document.getElementById("result-grade");
 const historyArea = document.getElementById("history");
 const probabilityBox = document.getElementById("probability");
 const recentBadge = document.getElementById("badge-recent");
+const teamMembersList = document.getElementById("team-members-list");
 
 // 확률표
 function renderProbability() {
@@ -41,9 +42,15 @@ function pickCard() {
   const selectedTeam = document.getElementById("team-filter")?.value;
   let pool = cardList;
 
-  // 팀이 선택되어 있으면 해당 팀 카드만 필터링
+  // 팀이 선택되어 있으면 해당 팀 카드 중 체크된 멤버만 필터링
   if (selectedTeam) {
-    pool = cardList.filter(c => c.team === selectedTeam);
+    const checkedMemberCheckboxes = teamMembersList.querySelectorAll('input[type="checkbox"]:checked');
+    if (checkedMemberCheckboxes.length === 0) {
+      alert("선택한 팀에서 체크된 멤버가 없습니다.");
+      return null;
+    }
+    const checkedNames = Array.from(checkedMemberCheckboxes).map(cb => cb.value);
+    pool = cardList.filter(c => c.team === selectedTeam && checkedNames.includes(c.name));
   }
 
   if (pool.length === 0) {
@@ -94,6 +101,10 @@ async function flipAndShowResult() {
   card.classList.remove("flip");
   await delay(50);
   const picked = pickCard();
+  if (!picked) {
+    locked = false;
+    return;
+  }
   applyResult(picked);
   addHistory(picked);
   await delay(80);
@@ -169,5 +180,44 @@ function renderTeamOptions() {
     option.value = team;
     option.textContent = team;
     select.appendChild(option);
+  });
+
+  // team-filter change 이벤트 등록
+  select.addEventListener("change", () => {
+    renderTeamMembers(select.value);
+  });
+
+  // 초기 렌더링
+  renderTeamMembers(select.value);
+}
+
+// 팀 멤버 체크박스 렌더링
+function renderTeamMembers(team) {
+  if (!teamMembersList) return;
+  teamMembersList.innerHTML = "";
+  if (!team) return;
+  const members = cardList.filter(card => card.team === team);
+  members.forEach(member => {
+    const label = document.createElement("label");
+    label.style.display = "block";
+    label.style.cursor = "pointer";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = member.name;
+    checkbox.checked = true;
+
+    const iconSpan = document.createElement("span");
+    iconSpan.textContent = member.icon;
+    iconSpan.style.marginRight = "4px";
+
+    const nameSpan = document.createElement("span");
+    nameSpan.textContent = member.name;
+
+    label.appendChild(checkbox);
+    label.appendChild(iconSpan);
+    label.appendChild(nameSpan);
+
+    teamMembersList.appendChild(label);
   });
 }
