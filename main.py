@@ -24,10 +24,11 @@ class Card(BaseModel):
     name: str
     team: str
     icon: str
+    grade: str
     wins: int = 0
     losses: int = 0
 
 @app.post("/api/cards/add")
 def create_card(card: Card):
-    add_card(card.name, card.team, card.icon, card.wins, card.losses)
+    add_card(card.name, card.team, card.icon, card.grade, card.wins, card.losses)
     return {"message": "Card added successfully"}

@@ -113,7 +113,7 @@ body {
   display: grid; place-items: center; text-align: center; gap: 8px;
   padding: 14px;
 }
-.result-name { font-size: 22px; font-weight: 800; line-height: 1.1; }
+.result-name { font-size: 15px; font-weight: 800; line-height: 1.1; }
 .result-grade { font-size: 12px; letter-spacing: .6px; text-transform: uppercase; color: var(--sub); }
 .result-icon { font-size: 56px; }
 
@@ -134,9 +134,19 @@ body {
 .probability { margin-top: 6px; font-size: 12px; color: var(--sub); display: flex; gap: 10px; flex-wrap: wrap; }
 .chip { padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); }
 
-.history { margin-top: 8px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
-.history .item { aspect-ratio: 1/1; display: grid; place-items: center; font-size: 20px; border-radius: 10px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); }
-
+.history { margin-top: 8px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;}
+.history .item {
+  aspect-ratio: 1/1;
+  display: flex;
+  flex-direction: column; /* 세로 배치 */
+  justify-content: center;
+  align-items: center;
+  gap: 4px; /* 아이콘과 이름 간격 */
+  font-size: 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+}
 .badge { padding: 4px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; }
 .badge.normal   { background: rgba(255,255,255,.08); }
 .badge.rare     { background: rgba(155, 89, 182,.25); color: #eee; }

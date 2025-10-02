@@ -45,7 +45,7 @@ function pickCard() {
 function applyResult(cardResult) {
     resultIcon.textContent = cardResult.icon;
     resultName.textContent = cardResult.name;
-    resultGrade.textContent = cardResult.name; // 팀 대신 이름 보여줌
+    resultGrade.textContent = cardResult.grade;
     recentBadge.className = "badge normal";
     recentBadge.textContent = "CARD";
 }
@@ -53,8 +53,22 @@ function applyResult(cardResult) {
 function addHistory(cardResult) {
   const div = document.createElement("div");
   div.className = "item";
-  div.title = `${cardResult.name}`;
-  div.textContent = `${cardResult.icon} ${cardResult.name}`;
+  div.title = cardResult.name;
+
+  // 아이콘
+  const icon = document.createElement("div");
+  icon.textContent = cardResult.icon;
+  icon.style.fontSize = "20px";   // 아이콘 크게
+
+  // 이름
+  const name = document.createElement("div");
+  name.textContent = cardResult.name;
+  name.style.fontSize = "12px";   // 이름 작게
+
+  // 조립
+  div.appendChild(icon);
+  div.appendChild(name);
+
   historyArea.prepend(div);
 }
 
@@ -103,6 +117,7 @@ if (addCardForm) {
       name: document.getElementById("name").value,
       team: document.getElementById("team").value,
       icon: document.getElementById("icon").value,
+      grade: document.getElementById("grade").value,
       wins: 0,
       losses: 0,
     };
@@ -115,7 +130,7 @@ if (addCardForm) {
 
     if (res.ok) {
       alert("카드가 추가되었습니다!");
-      loadCards(); // 카드 리스트 다시 불러오기
+      loadCards();
       addCardForm.reset();
     } else {
       alert("카드 추가에 실패했습니다.");
