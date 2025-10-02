@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-import sqlite3
 from database import init_db, get_all_cards, add_card
 
 app = FastAPI()

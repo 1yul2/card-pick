@@ -1,15 +1,15 @@
-import sqlite3
-
-DB_NAME = "cards.db"
+import os
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 def get_connection():
-    return sqlite3.connect(DB_NAME)
+    return psycopg2.connect(os.environ['DATABASE_URL'], cursor_factory=RealDictCursor)
 
 def add_card(name: str, team: str, icon: str, grade: str, wins: int = 0, losses: int = 0):
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
-        "INSERT INTO cards (name, team, icon, grade, wins, losses) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO cards (name, team, icon, grade, wins, losses) VALUES (%s, %s, %s, %s, %s, %s)",
         (name, team, icon, grade, wins, losses)
     )
     conn.commit()
@@ -20,7 +20,7 @@ def init_db():
     cur = conn.cursor()
     cur.execute("""
     CREATE TABLE IF NOT EXISTS cards (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         team TEXT NOT NULL,
         icon TEXT NOT NULL,
@@ -34,9 +34,8 @@ def init_db():
 
 def get_all_cards():
     conn = get_connection()
-    conn.row_factory = sqlite3.Row
     cur = conn.cursor()
     cur.execute("SELECT name, team, icon, grade, wins, losses FROM cards")
     rows = cur.fetchall()
     conn.close()
-    return [dict(row) for row in rows]
+    return rows
