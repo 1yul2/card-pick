@@ -221,3 +221,108 @@ function renderTeamMembers(team) {
     teamMembersList.appendChild(label);
   });
 }
+
+// Admin-only section for deleting and editing cards
+
+async function deleteCard(id) {
+  if (!confirm("정말 이 카드를 삭제하시겠습니까?")) return;
+  try {
+    const res = await fetch(`/api/cards/delete/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      alert("카드가 삭제되었습니다.");
+      await loadCards();
+      renderAdminCards();
+    } else {
+      alert("카드 삭제에 실패했습니다.");
+    }
+  } catch (error) {
+    alert("오류가 발생했습니다.");
+  }
+}
+
+async function updateCard(id, data) {
+  try {
+    const res = await fetch(`/api/cards/update/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      alert("카드가 업데이트되었습니다.");
+      await loadCards();
+      renderAdminCards();
+    } else {
+      alert("카드 업데이트에 실패했습니다.");
+    }
+  } catch (error) {
+    alert("오류가 발생했습니다.");
+  }
+}
+
+async function renderAdminCards() {
+  const adminList = document.getElementById("admin-cards-list");
+  if (!adminList) return;
+  adminList.innerHTML = "";
+
+  try {
+    const res = await fetch("/api/cards");
+    if (!res.ok) {
+      adminList.textContent = "카드 목록을 불러오는데 실패했습니다.";
+      return;
+    }
+    const cards = await res.json();
+
+    cards.forEach(card => {
+      const div = document.createElement("div");
+      div.className = "admin-card-item";
+      div.style.border = "1px solid #ccc";
+      div.style.padding = "8px";
+      div.style.marginBottom = "8px";
+
+      const info = document.createElement("div");
+      info.textContent = `${card.icon} ${card.name} (${card.team}) - ${card.grade}`;
+      info.style.marginBottom = "4px";
+
+      const btnDelete = document.createElement("button");
+      btnDelete.textContent = "삭제";
+      btnDelete.style.marginRight = "8px";
+      btnDelete.addEventListener("click", () => deleteCard(card.id));
+
+      const btnEdit = document.createElement("button");
+      btnEdit.textContent = "수정";
+      btnEdit.addEventListener("click", () => {
+        // 간단한 prompt를 이용한 수정 예시
+        const newName = prompt("이름을 입력하세요:", card.name);
+        if (newName === null) return;
+        const newTeam = prompt("팀을 입력하세요:", card.team);
+        if (newTeam === null) return;
+        const newIcon = prompt("아이콘을 입력하세요:", card.icon);
+        if (newIcon === null) return;
+        const newGrade = prompt("등급을 입력하세요 (normal, rare, epic, legend):", card.grade);
+        if (newGrade === null) return;
+
+        const updatedData = {
+          name: newName.trim(),
+          team: newTeam.trim(),
+          icon: newIcon.trim(),
+          grade: newGrade.trim(),
+          wins: card.wins || 0,
+          losses: card.losses || 0,
+        };
+        updateCard(card.id, updatedData);
+      });
+
+      div.appendChild(info);
+      div.appendChild(btnDelete);
+      div.appendChild(btnEdit);
+
+      adminList.appendChild(div);
+    });
+  } catch (error) {
+    adminList.textContent = "오류가 발생했습니다.";
+  }
+}
+
+if (document.getElementById("admin-cards-list")) {
+  renderAdminCards();
+}
