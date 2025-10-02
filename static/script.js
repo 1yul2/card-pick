@@ -290,7 +290,7 @@ async function renderAdminCards() {
       div.style.marginBottom = "8px";
 
       const info = document.createElement("div");
-      info.textContent = `${card.icon} ${card.name} (${card.team}) - ${card.grade}`;
+      info.textContent = `[${card.id}] ${card.icon} ${card.name} (${card.team}) - ${card.grade}`;
       info.style.marginBottom = "4px";
 
       const btnDelete = document.createElement("button");
