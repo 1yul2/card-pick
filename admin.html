@@ -11,6 +11,11 @@
         <h1>관리자 페이지 <span class="badge">ADMIN</span></h1>
     </header>
     <main class="container">
+        <label for="team-selector">팀 선택:</label>
+        <select id="team-selector">
+            <option value="all">전체</option>
+        </select>
+        <section id="team-view" class="team-view"></section>
         <section id="cards-list" class="cards-list"></section>
     </main>
     <script>
@@ -124,6 +129,42 @@
             return cardDiv;
         }
 
+        function renderTeamOptions(cards) {
+            const teamSelector = document.getElementById('team-selector');
+            const teams = new Set(cards.map(card => card.team).filter(Boolean));
+            // Clear existing options except "all"
+            teamSelector.innerHTML = '<option value="all">전체</option>';
+            teams.forEach(team => {
+                const option = document.createElement('option');
+                option.value = team;
+                option.textContent = team;
+                teamSelector.appendChild(option);
+            });
+        }
+
+        function createTeamViewCard(card) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'team-card-item';
+
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'card-icon';
+            iconSpan.textContent = card.icon || '';
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'card-name';
+            nameSpan.textContent = card.name || '';
+
+            const gradeSpan = document.createElement('span');
+            gradeSpan.className = 'card-grade';
+            gradeSpan.textContent = card.grade || '';
+
+            cardDiv.appendChild(iconSpan);
+            cardDiv.appendChild(nameSpan);
+            cardDiv.appendChild(gradeSpan);
+
+            return cardDiv;
+        }
+
         async function renderCards() {
             const cardsList = document.getElementById('cards-list');
             cardsList.innerHTML = '';
@@ -132,10 +173,33 @@
                 cardsList.textContent = '등록된 카드가 없습니다.';
                 return;
             }
+            renderTeamOptions(cards);
             cards.forEach(card => {
                 cardsList.appendChild(createCardElement(card));
             });
+            renderTeamView(cards); // Show all cards initially
         }
+
+        function renderTeamView(cards) {
+            const teamView = document.getElementById('team-view');
+            const teamSelector = document.getElementById('team-selector');
+            const selectedTeam = teamSelector.value;
+            teamView.innerHTML = '';
+
+            const filteredCards = selectedTeam === 'all' ? cards : cards.filter(card => card.team === selectedTeam);
+            if (filteredCards.length === 0) {
+                teamView.textContent = '선택한 팀의 카드가 없습니다.';
+                return;
+            }
+            filteredCards.forEach(card => {
+                teamView.appendChild(createTeamViewCard(card));
+            });
+        }
+
+        document.getElementById('team-selector').addEventListener('change', async () => {
+            const cards = await fetchCards();
+            renderTeamView(cards);
+        });
 
         renderCards();
     </script>
