@@ -27,17 +27,35 @@
 
         function createCardElement(card) {
             const cardDiv = document.createElement('div');
-            cardDiv.className = 'card admin-card';
+            cardDiv.className = 'admin-card-item';
 
-            const frontInput = document.createElement('input');
-            frontInput.type = 'text';
-            frontInput.value = card.front;
-            frontInput.className = 'card-input front-input';
+            const nameLabel = document.createElement('label');
+            nameLabel.textContent = '이름';
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.value = card.name || '';
+            nameInput.className = 'card-input';
 
-            const backInput = document.createElement('input');
-            backInput.type = 'text';
-            backInput.value = card.back;
-            backInput.className = 'card-input back-input';
+            const teamLabel = document.createElement('label');
+            teamLabel.textContent = '팀';
+            const teamInput = document.createElement('input');
+            teamInput.type = 'text';
+            teamInput.value = card.team || '';
+            teamInput.className = 'card-input';
+
+            const iconLabel = document.createElement('label');
+            iconLabel.textContent = '아이콘';
+            const iconInput = document.createElement('input');
+            iconInput.type = 'text';
+            iconInput.value = card.icon || '';
+            iconInput.className = 'card-input';
+
+            const gradeLabel = document.createElement('label');
+            gradeLabel.textContent = '직책';
+            const gradeInput = document.createElement('input');
+            gradeInput.type = 'text';
+            gradeInput.value = card.grade || '';
+            gradeInput.className = 'card-input';
 
             const btnGroup = document.createElement('div');
             btnGroup.className = 'btn-group';
@@ -53,17 +71,27 @@
             btnGroup.appendChild(saveBtn);
             btnGroup.appendChild(deleteBtn);
 
-            cardDiv.appendChild(frontInput);
-            cardDiv.appendChild(backInput);
+            cardDiv.appendChild(nameLabel);
+            cardDiv.appendChild(nameInput);
+            cardDiv.appendChild(teamLabel);
+            cardDiv.appendChild(teamInput);
+            cardDiv.appendChild(iconLabel);
+            cardDiv.appendChild(iconInput);
+            cardDiv.appendChild(gradeLabel);
+            cardDiv.appendChild(gradeInput);
             cardDiv.appendChild(btnGroup);
 
             saveBtn.addEventListener('click', async () => {
                 const updatedCard = {
-                    front: frontInput.value.trim(),
-                    back: backInput.value.trim(),
+                    name: nameInput.value.trim(),
+                    team: teamInput.value.trim(),
+                    icon: iconInput.value.trim(),
+                    grade: gradeInput.value.trim(),
+                    win: card.win || 0,
+                    losses: card.losses || 0,
                 };
-                if (!updatedCard.front || !updatedCard.back) {
-                    alert('앞면과 뒷면을 모두 입력해주세요.');
+                if (!updatedCard.name || !updatedCard.team) {
+                    alert('이름과 팀을 입력해주세요.');
                     return;
                 }
                 try {
