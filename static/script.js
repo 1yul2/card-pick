@@ -227,7 +227,10 @@ function renderTeamMembers(team) {
 async function deleteCard(id) {
   if (!confirm("정말 이 카드를 삭제하시겠습니까?")) return;
   try {
-    const res = await fetch(`/api/cards/delete/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/cards/delete/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }
+    });
     if (res.ok) {
       alert("카드가 삭제되었습니다.");
       await loadCards();
@@ -245,10 +248,13 @@ async function updateCard(id, data) {
     const res = await fetch(`/api/cards/update/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      // Ensure the property name is 'wins' (plural) in the payload
       body: JSON.stringify({
-        ...data,
-        wins: data.wins, // ensure correct spelling
+        name: data.name,
+        team: data.team,
+        icon: data.icon,
+        grade: data.grade,
+        wins: data.wins,
+        losses: data.losses
       }),
     });
     if (res.ok) {
