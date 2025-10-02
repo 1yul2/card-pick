@@ -85,6 +85,10 @@ def delete_card(card_id: int):
         logger.exception("[delete] unexpected error id=%s", card_id)
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.delete("/api/cards/{card_id}")
+def delete_card_short(card_id: int):
+    return delete_card(card_id)
+
 @app.put("/api/cards/update/{card_id}")
 def update_card(card_id: int, card: Card):
     logger.info("[update] request received id=%s payload=%s", card_id, card.dict())
@@ -99,3 +103,7 @@ def update_card(card_id: int, card: Card):
     except Exception as e:
         logger.exception("[update] unexpected error id=%s", card_id)
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.put("/api/cards/{card_id}")
+def update_card_short(card_id: int, card: Card):
+    return update_card(card_id, card)
