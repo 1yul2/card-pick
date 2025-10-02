@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>관리자 페이지</title>
-</head>
     <link rel="stylesheet" href="/static/style.css" />
     <style>
       body {
@@ -56,14 +55,6 @@
         padding: 12px;
         border-radius: 8px;
       }
-      .admin-card-item {
-        background: #1f2937;
-        padding: 16px;
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
       .card-input {
         width: 100%;
         padding: 8px;
@@ -71,6 +62,7 @@
         border-radius: 6px;
         background: #111827;
         color: #f9fafb;
+        box-sizing: border-box;
       }
       .btn-group {
         display: flex;
@@ -92,6 +84,19 @@
       .delete-btn {
         background: #dc2626;
         color: white;
+      }
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+      }
+      .admin-table th, .admin-table td {
+        border: 1px solid #374151;
+        padding: 8px;
+        text-align: center;
+      }
+      .admin-table th {
+        background: #1f2937;
       }
     </style>
 </head>
@@ -120,39 +125,71 @@
         }
 
         function createCardElement(card) {
-            const cardDiv = document.createElement('div');
-            cardDiv.className = 'admin-card-item';
+            const tr = document.createElement('tr');
 
-            const nameLabel = document.createElement('label');
-            nameLabel.textContent = '이름';
+            // ID cell (not editable)
+            const idTd = document.createElement('td');
+            idTd.textContent = card.id || '';
+            tr.appendChild(idTd);
+
+            // 이름 input
+            const nameTd = document.createElement('td');
             const nameInput = document.createElement('input');
             nameInput.type = 'text';
             nameInput.value = card.name || '';
             nameInput.className = 'card-input';
+            nameTd.appendChild(nameInput);
+            tr.appendChild(nameTd);
 
-            const teamLabel = document.createElement('label');
-            teamLabel.textContent = '팀';
+            // 팀 input
+            const teamTd = document.createElement('td');
             const teamInput = document.createElement('input');
             teamInput.type = 'text';
             teamInput.value = card.team || '';
             teamInput.className = 'card-input';
+            teamTd.appendChild(teamInput);
+            tr.appendChild(teamTd);
 
-            const iconLabel = document.createElement('label');
-            iconLabel.textContent = '아이콘';
+            // 아이콘 input
+            const iconTd = document.createElement('td');
             const iconInput = document.createElement('input');
             iconInput.type = 'text';
             iconInput.value = card.icon || '';
             iconInput.className = 'card-input';
+            iconTd.appendChild(iconInput);
+            tr.appendChild(iconTd);
 
-            const gradeLabel = document.createElement('label');
-            gradeLabel.textContent = '직책';
+            // 직책 input
+            const gradeTd = document.createElement('td');
             const gradeInput = document.createElement('input');
             gradeInput.type = 'text';
             gradeInput.value = card.grade || '';
             gradeInput.className = 'card-input';
+            gradeTd.appendChild(gradeInput);
+            tr.appendChild(gradeTd);
 
-            const btnGroup = document.createElement('div');
-            btnGroup.className = 'btn-group';
+            // Wins input
+            const winTd = document.createElement('td');
+            const winInput = document.createElement('input');
+            winInput.type = 'number';
+            winInput.min = '0';
+            winInput.value = card.win || 0;
+            winInput.className = 'card-input';
+            winTd.appendChild(winInput);
+            tr.appendChild(winTd);
+
+            // Losses input
+            const lossesTd = document.createElement('td');
+            const lossesInput = document.createElement('input');
+            lossesInput.type = 'number';
+            lossesInput.min = '0';
+            lossesInput.value = card.losses || 0;
+            lossesInput.className = 'card-input';
+            lossesTd.appendChild(lossesInput);
+            tr.appendChild(lossesTd);
+
+            // 작업 (actions) cell with buttons
+            const actionTd = document.createElement('td');
 
             const saveBtn = document.createElement('button');
             saveBtn.textContent = '저장';
@@ -162,18 +199,9 @@
             deleteBtn.textContent = '삭제';
             deleteBtn.className = 'btn delete-btn';
 
-            btnGroup.appendChild(saveBtn);
-            btnGroup.appendChild(deleteBtn);
-
-            cardDiv.appendChild(nameLabel);
-            cardDiv.appendChild(nameInput);
-            cardDiv.appendChild(teamLabel);
-            cardDiv.appendChild(teamInput);
-            cardDiv.appendChild(iconLabel);
-            cardDiv.appendChild(iconInput);
-            cardDiv.appendChild(gradeLabel);
-            cardDiv.appendChild(gradeInput);
-            cardDiv.appendChild(btnGroup);
+            actionTd.appendChild(saveBtn);
+            actionTd.appendChild(deleteBtn);
+            tr.appendChild(actionTd);
 
             saveBtn.addEventListener('click', async () => {
                 const updatedCard = {
@@ -181,8 +209,8 @@
                     team: teamInput.value.trim(),
                     icon: iconInput.value.trim(),
                     grade: gradeInput.value.trim(),
-                    win: card.win || 0,
-                    losses: card.losses || 0,
+                    win: Number(winInput.value) || 0,
+                    losses: Number(lossesInput.value) || 0,
                 };
                 if (!updatedCard.name || !updatedCard.team) {
                     alert('이름과 팀을 입력해주세요.');
@@ -209,13 +237,13 @@
                     });
                     if (!res.ok) throw new Error('카드 삭제에 실패했습니다.');
                     alert('카드가 삭제되었습니다.');
-                    cardDiv.remove();
+                    tr.remove();
                 } catch (e) {
                     alert(e.message);
                 }
             });
 
-            return cardDiv;
+            return tr;
         }
 
         function renderTeamOptions(cards) {
@@ -263,9 +291,28 @@
                 return;
             }
             renderTeamOptions(cards);
-            cards.forEach(card => {
-                cardsList.appendChild(createCardElement(card));
+
+            const table = document.createElement('table');
+            table.className = 'admin-table';
+
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            ['ID', '이름', '팀', '아이콘', '직책', 'Wins', 'Losses', '작업'].forEach(text => {
+                const th = document.createElement('th');
+                th.textContent = text;
+                headerRow.appendChild(th);
             });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            cards.forEach(card => {
+                tbody.appendChild(createCardElement(card));
+            });
+            table.appendChild(tbody);
+
+            cardsList.appendChild(table);
+
             renderTeamView(cards); // Show all cards initially
         }
 

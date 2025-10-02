@@ -236,9 +236,12 @@ async function deleteCard(id) {
       await loadCards();
       renderAdminCards();
     } else {
-      alert("카드 삭제에 실패했습니다.");
+      const err = await res.json().catch(() => ({}));
+      console.error("Delete failed", res.status, err);
+      alert("카드 삭제에 실패했습니다. (" + res.status + ")");
     }
   } catch (error) {
+    console.error(error);
     alert("오류가 발생했습니다.");
   }
 }
@@ -262,9 +265,12 @@ async function updateCard(id, data) {
       await loadCards();
       renderAdminCards();
     } else {
-      alert("카드 업데이트에 실패했습니다.");
+      const err = await res.json().catch(() => ({}));
+      console.error("Update failed", res.status, err);
+      alert("카드 업데이트에 실패했습니다. (" + res.status + ")");
     }
   } catch (error) {
+    console.error(error);
     alert("오류가 발생했습니다.");
   }
 }

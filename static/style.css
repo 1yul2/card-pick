@@ -138,11 +138,13 @@ body {
 .history .item {
   aspect-ratio: 1/1;
   display: flex;
-  flex-direction: column; /* 세로 배치 */
-  justify-content: center;
+  flex-direction: row; /* 가로 배치 */
+  flex-wrap: wrap;
+  justify-content: flex-start;
   align-items: center;
-  gap: 4px; /* 아이콘과 이름 간격 */
-  font-size: 12px;
+  gap: 6px; /* 아이콘과 이름 간격 */
+  font-size: 14px;
+  padding: 6px;
   border-radius: 10px;
   background: rgba(255,255,255,.05);
   border: 1px solid rgba(255,255,255,.08);
