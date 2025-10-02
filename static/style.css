@@ -276,3 +276,65 @@ body {
   .result-icon { font-size: 48px; }
   .button { padding: 12px 14px; font-size: 15px; }
 }
+
+/* 관리자 페이지 스타일 */
+.admin-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.admin-container h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.admin-item input {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.admin-item button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-item button.save {
+  background: var(--btn);
+  color: #fff;
+}
+
+.admin-item button.delete {
+  background: #e74c3c;
+  color: #fff;
+}
