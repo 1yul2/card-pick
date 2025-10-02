@@ -4,7 +4,96 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>관리자 페이지</title>
+</head>
     <link rel="stylesheet" href="/static/style.css" />
+    <style>
+      body {
+        font-family: 'Apple SD Gothic Neo', sans-serif;
+        margin: 0;
+        background: #111827;
+        color: #f9fafb;
+      }
+      .header {
+        padding: 16px;
+        background: #1f2937;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .badge {
+        font-size: 12px;
+        background: #2563eb;
+        padding: 3px 8px;
+        border-radius: 6px;
+        margin-left: 8px;
+      }
+      .container {
+        padding: 16px;
+        max-width: 600px;
+        margin: auto;
+      }
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 16px;
+        border-radius: 6px;
+        border: 1px solid #374151;
+        background: #1f2937;
+        color: #f9fafb;
+      }
+      .team-view, .cards-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .team-card-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #1f2937;
+        padding: 12px;
+        border-radius: 8px;
+      }
+      .admin-card-item {
+        background: #1f2937;
+        padding: 16px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .card-input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #374151;
+        border-radius: 6px;
+        background: #111827;
+        color: #f9fafb;
+      }
+      .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .btn {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .save-btn {
+        background: #2563eb;
+        color: white;
+      }
+      .delete-btn {
+        background: #dc2626;
+        color: white;
+      }
+    </style>
 </head>
 <body>
     <header class="header">
